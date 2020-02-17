@@ -1,4 +1,5 @@
 FROM jupyter/datascience-notebook:3deefc7d16c7
+MAINTAINER Daniel Bachler
 
 USER root
 
