@@ -1,4 +1,4 @@
-FROM douglasconnect/datascience-notebook
+FROM douglasconnect/datascience-notebook:0.1
 
 RUN conda install --yes --freeze-installed \
     r-pheatmap \
