@@ -1,5 +1,4 @@
 FROM jupyter/datascience-notebook:7e2f380b1792
-MAINTAINER Daniel Bachler
 
 USER root
 
@@ -11,7 +10,6 @@ RUN apt-get clean && \
     apt-get update --allow-unauthenticated && \
     apt-get install -y --no-install-recommends \
         fonts-dejavu \
-        gfortran \
         build-essential && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
@@ -27,19 +25,12 @@ RUN conda install --yes --freeze-installed \
     ipywidgets \
     seaborn \
     matplotlib \
-    r-pheatmap \
-    r-reshape2 \
-    r-gplots \
-    r-rcolorbrewer \
-    r-ggplot2 \
-    r-biocmanager \
-    r-drc \
-    r-mass \
+    altair \
     r-rjsonio \
-    r-dplyr \
-    r-magrittr \
-  && R -e 'BiocManager::install("DESeq2")' \
-  && conda clean -afy\
+    r-tidyverse \
+  && pip install --upgrade edelweiss-data jupyterlab-git==0.20.0 \
+  && jupyter lab build \
+  && conda clean -afy \
   && find /opt/conda/ -follow -type f -name '*.a' -delete \
   && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
   && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
