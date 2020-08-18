@@ -1,15 +1,8 @@
 FROM douglasconnect/datascience-notebook:0.1
 
-RUN conda install --yes --freeze-installed \
-    r-pheatmap \
-    r-reshape2 \
-    r-gplots \
-    r-rcolorbrewer \
-    r-biocmanager \
-    r-drc \
-    r-mass \
-  && conda install --yes --freeze-installed -c rdkit rdkit \
-  && R -e 'BiocManager::install("DESeq2")' \
+USER $NB_USER
+
+RUN conda install --yes --freeze-installed rdkit \
   && conda clean -afy \
   && find /opt/conda/ -follow -type f -name '*.a' -delete \
   && find /opt/conda/ -follow -type f -name '*.pyc' -delete \

@@ -1,45 +1,29 @@
-FROM jupyter/datascience-notebook:7e2f380b1792
-MAINTAINER Daniel Bachler
+FROM douglasconnect/datascience-notebook:0.1
 
 USER root
 
 # R pre-requisites
 RUN apt-get clean && \
-    mv /var/lib/apt/lists /tmp && \
-    mkdir -p /var/lib/apt/lists/partial && \
-    apt-get clean && \
     apt-get update --allow-unauthenticated && \
     apt-get install -y --no-install-recommends \
-        fonts-dejavu \
-        gfortran \
-        build-essential && \
+        gfortran && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    chmod g+w /etc/passwd
+    rm -rf /var/lib/apt/lists/*
 # we make /etc/password writeable by group so that when we run as non-root user it can be added and we get a username
 
 USER $NB_USER
 
+ADD .condarc .condarc
+
 RUN conda install --yes --freeze-installed \
-    pandas \
-    requests \
-    simplejson \
-    ipywidgets \
-    seaborn \
-    matplotlib \
-    r-pheatmap \
-    r-reshape2 \
-    r-gplots \
-    r-rcolorbrewer \
-    r-ggplot2 \
     r-biocmanager \
+    bioconductor-deseq2 \
     r-drc \
     r-mass \
-    r-rjsonio \
-    r-dplyr \
-    r-magrittr \
-  && R -e 'BiocManager::install("DESeq2")' \
-  && conda clean -afy\
+    r-pheatmap \
+    r-gplots \
+    rdkit \
+  && conda clean -afy \
   && find /opt/conda/ -follow -type f -name '*.a' -delete \
   && find /opt/conda/ -follow -type f -name '*.pyc' -delete \
   && find /opt/conda/ -follow -type f -name '*.js.map' -delete \
